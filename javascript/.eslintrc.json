@@ -1,0 +1,68 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "prettier",
+    "plugin:jsx-a11y/recommended",
+    "plugin:prettier/recommended",
+    "plugin:tailwindcss/recommended",
+    "plugin:eslint-plugin-prettier/recommended"
+  ],
+  "plugins": ["react", "prettier", "tailwindcss", "jsx-a11y"],
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "!.prettierrc.js",
+    "!.eslintrc.js",
+    "**/*.config.js"
+  ],
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling", "index"],
+          "object"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "@/**/*",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "alphabetize": {
+          "order": "asc"
+        },
+        "newlines-between": "always"
+      }
+    ],
+    "react/function-component-definition": [
+      "warn",
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/jsx-pascal-case": "error",
+    "camelcase": ["error", { "properties": "never" }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "off",
+    "prettier/prettier": ["error", {}, { "usePrettierrc": true }],
+    "@next/next/no-img-element": "off", // enable img element uses
+    "tailwindcss/classnames-order": "off", // disabled tailwindcss/classnames-order to prevent conflict with prettier tailwind classname order
+    "tailwindcss/no-custom-classname": "off", // disabled tailwindcss/no-custom-classname to give flexibility of 3rd party custom classname
+    "tailwindcss/no-contradicting-classname": "error",
+    "react/no-unescaped-entities": "off",
+    "no-unused-vars": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "root": true
+}

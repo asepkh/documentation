@@ -1,4 +1,4 @@
-# Code Standardization with ESLint
+# Code Standardization with Eslint and Prettier
 
 ## Introduction
 
@@ -49,8 +49,8 @@ Here's our ESLint configuration (will always be updated for any feedback and imp
   "ignorePatterns": [
     "node_modules/",
     ".next/",
-    "!.prettierrc.js",
-    "!.eslintrc.js",
+    "!.prettierrc.json",
+    "!.eslintrc.json",
     "**/*.config.js"
   ],
   "rules": {
@@ -95,7 +95,15 @@ Here's our ESLint configuration (will always be updated for any feedback and imp
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/no-contradicting-classname": "error",
     "react/no-unescaped-entities": "off",
-    "no-unused-vars": "error"
+    "no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "error"
   },
   "settings": {
     "react": {
@@ -209,7 +217,15 @@ The `rules` property defines custom linting rules to enforce specific coding sta
     "tailwindcss/no-custom-classname": "off",
     "tailwindcss/no-contradicting-classname": "error",
     "react/no-unescaped-entities": "off",
-    "no-unused-vars": "error"
+    "no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/no-explicit-any": "error"
   }
 }
 ```
@@ -392,6 +408,78 @@ This rule enforces that there are no unused variables in the code.
     return <div>Hello World</div>;
   };
   ```
+
+#### `@typescript-eslint/no-unused-vars`
+
+This rule detects and reports on variables that are declared but never used in your TypeScript code.
+
+```json
+"@typescript-eslint/no-unused-vars": [
+  "error",
+  {
+    "argsIgnorePattern": "^_",
+    "varsIgnorePattern": "^_"
+  }
+]
+```
+
+- **`"error"`**: This setting will throw an error if unused variables are detected.
+- **`argsIgnorePattern`**: This option specifies a pattern for function arguments that should be ignored by this rule. In this case, any argument starting with an underscore (`_`) will be ignored.
+- **`varsIgnorePattern`**: Similar to `argsIgnorePattern`, but for variables. Any variable starting with an underscore will be ignored.
+
+This configuration is useful when you want to declare variables or function parameters that you don't intend to use, but want to keep for clarity or future use. By prefixing them with an underscore, you're telling ESLint to ignore them.
+
+- **Incorrect Code:**
+
+  ```typescript
+  function exampleFunction(unusedParam: string, usedParam: number) {
+    console.log(usedParam);
+  }
+
+  const unusedVariable = 5;
+  ```
+
+- **Correct Code:**
+
+  ```typescript
+  function exampleFunction(_unusedParam: string, usedParam: number) {
+    console.log(usedParam);
+  }
+
+  const _unusedVariable = 5;
+  ```
+
+#### `@typescript-eslint/no-explicit-any`
+
+This rule disallows the use of the `any` type in TypeScript.
+
+```json
+"@typescript-eslint/no-explicit-any": "error"
+```
+
+The `any` type in TypeScript essentially turns off type checking for the variable it's applied to, which can lead to type-related bugs. This rule encourages you to use more specific types, improving type safety in your code.
+
+- **Incorrect Code:**
+
+  ```typescript
+  function example(param: any) {
+    console.log(param);
+  }
+
+  const value: any = "string";
+  ```
+
+- **Correct Code:**
+
+  ```typescript
+  function example(param: unknown) {
+    console.log(param);
+  }
+
+  const value: string = "string";
+  ```
+
+These rules together encourage more type-safe and cleaner TypeScript code, reducing potential bugs and improving code quality.
 
 ### Settings
 
@@ -598,9 +686,264 @@ This rule enforces that there are no unused variables in the code.
   };
   ```
 
+### `@typescript-eslint/no-unused-vars`
+
+This rule detects and reports on variables that are declared but never used in your TypeScript code.
+
+```json
+"@typescript-eslint/no-unused-vars": [
+  "error",
+  {
+    "argsIgnorePattern": "^_",
+    "varsIgnorePattern": "^_"
+  }
+]
+```
+
+- **`"error"`**: This setting will throw an error if unused variables are detected.
+- **`argsIgnorePattern`**: This option specifies a pattern for function arguments that should be ignored by this rule. In this case, any argument starting with an underscore (`_`) will be ignored.
+- **`varsIgnorePattern`**: Similar to `argsIgnorePattern`, but for variables. Any variable starting with an underscore will be ignored.
+
+This configuration is useful when you want to declare variables or function parameters that you don't intend to use, but want to keep for clarity or future use. By prefixing them with an underscore, you're telling ESLint to ignore them.
+
+- **Incorrect Code:**
+
+  ```typescript
+  function exampleFunction(unusedParam: string, usedParam: number) {
+    console.log(usedParam);
+  }
+
+  const unusedVariable = 5;
+  ```
+
+- **Correct Code:**
+
+  ```typescript
+  function exampleFunction(_unusedParam: string, usedParam: number) {
+    console.log(usedParam);
+  }
+
+  const _unusedVariable = 5;
+  ```
+
+### `@typescript-eslint/no-explicit-any`
+
+This rule disallows the use of the `any` type in TypeScript.
+
+```json
+"@typescript-eslint/no-explicit-any": "error"
+```
+
+The `any` type in TypeScript essentially turns off type checking for the variable it's applied to, which can lead to type-related bugs. This rule encourages you to use more specific types, improving type safety in your code.
+
+- **Incorrect Code:**
+
+  ```typescript
+  function example(param: any) {
+    console.log(param);
+  }
+
+  const value: any = "string";
+  ```
+
+- **Correct Code:**
+
+  ```typescript
+  function example(param: unknown) {
+    console.log(param);
+  }
+
+  const value: string = "string";
+  ```
+
+These rules together encourage more type-safe and cleaner TypeScript code, reducing potential bugs and improving code quality.
+
+# Prettier Configuration
+
+```json
+{
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "all",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "endOfLine": "auto",
+  "proseWrap": "always"
+}
+```
+
+## Configuration Breakdown
+
+### `plugins`
+
+```json
+"plugins": ["prettier-plugin-tailwindcss"]
+```
+
+- **Description**: This specifies additional plugins to be used by Prettier. In this case, `prettier-plugin-tailwindcss` is included to automatically sort Tailwind CSS classes in your code.
+- **Example**:
+
+  ```html
+  <!-- Before -->
+  <div class="text-center bg-red-500 p-4"></div>
+
+  <!-- After (sorted by plugin) -->
+  <div class="bg-red-500 p-4 text-center"></div>
+  ```
+
+### `semi`
+
+```json
+"semi": true
+```
+
+- **Description**: This setting enforces the use of semicolons at the end of statements.
+- **Example**:
+
+  ```javascript
+  // Before
+  const foo = "bar";
+
+  // After
+  const foo = "bar";
+  ```
+
+### `singleQuote`
+
+```json
+"singleQuote": false
+```
+
+- **Description**: This setting enforces the use of double quotes for strings instead of single quotes.
+- **Example**:
+
+  ```javascript
+  // Before
+  const foo = "bar";
+
+  // After
+  const foo = "bar";
+  ```
+
+### `trailingComma`
+
+```json
+"trailingComma": "all"
+```
+
+- **Description**: This setting enforces the use of trailing commas wherever possible, such as in objects, arrays, and function parameters.
+- **Example**:
+
+  ```javascript
+  // Before
+  const obj = {
+    foo: "bar",
+    baz: "qux",
+  };
+
+  // After
+  const obj = {
+    foo: "bar",
+    baz: "qux",
+  };
+  ```
+
+### `printWidth`
+
+```json
+"printWidth": 80
+```
+
+- **Description**: This setting specifies the maximum line length that Prettier will wrap on. Lines longer than 80 characters will be wrapped.
+- **Example**:
+
+  ```javascript
+  // Before
+  const longString =
+    "This is a very long string that will be wrapped by Prettier because it exceeds the print width of 80 characters.";
+
+  // After
+  const longString =
+    "This is a very long string that will be wrapped by Prettier because it exceeds the print width of 80 characters.";
+  ```
+
+### `tabWidth`
+
+```json
+"tabWidth": 2
+```
+
+- **Description**: This setting specifies the number of spaces per indentation level.
+- **Example**:
+
+  ```javascript
+  // Before
+  function foo() {
+    console.log("bar");
+  }
+
+  // After
+  function foo() {
+    console.log("bar");
+  }
+  ```
+
+### `endOfLine`
+
+```json
+"endOfLine": "auto"
+```
+
+- **Description**: This setting maintains existing end-of-line characters (LF or CRLF) in the file. It helps to avoid issues with different operating systems.
+- **Example**:
+
+  ```javascript
+  // Before (on Windows)
+  const foo = "bar"; // CRLF
+
+  // After (on Unix-based OS)
+  const foo = "bar"; // LF
+  ```
+
+### `proseWrap`
+
+```json
+"proseWrap": "always"
+```
+
+- **Description**: This setting ensures that markdown text is always wrapped according to the `printWidth` setting.
+- **Example**:
+
+  ```markdown
+  <!-- Before -->
+
+  This is a very long line in a markdown file that will be wrapped by Prettier because it exceeds the print width of 80 characters.
+
+  <!-- After -->
+
+  This is a very long line in a markdown file that will be wrapped by Prettier
+  because it exceeds the print width of 80 characters.
+  ```
+
 ### Additional Tips
 
 1. **Automate Linting**: Integrate ESLint into your CI/CD pipeline to automatically lint code on every push or pull request. This ensures that code quality is maintained across the team.
 2. **Editor Configuration**: Ensure all team members have their editors configured to use ESLint and Prettier. This can be done by sharing editor configuration files like `.vscode/settings.json`.
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "eslint.validate": ["javascript", "javascriptreact"],
+  "prettier.requireConfig": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
+```
 
 Disclaimer: This documentation was written with the assistance of AI.
